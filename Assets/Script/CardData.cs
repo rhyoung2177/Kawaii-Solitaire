@@ -2,6 +2,7 @@
 
 public class CardData
 {
+    public int index;   // 해당 카드의 고유 번호 (리스트 내부 식별을 위함)
     public Suit suit;
     public Rank rank;
 

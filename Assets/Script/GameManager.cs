@@ -18,4 +18,16 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
     }
+
+    public void EndTurn()
+    {
+        foreach (Space space in spaceList)
+        {
+            if (space.HasCompletedSuit())
+            {
+                Debug.Log($"{space.name} CompleteOneSequence");
+            }
+        }
+
+    }
 }
