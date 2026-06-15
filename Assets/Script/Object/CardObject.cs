@@ -7,15 +7,12 @@ using UnityEngine.UI;
 
 public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public int index;
-    public CardData.Rank rank;
-    public CardData.Suit suit;
-
     public TextMeshProUGUI tempText;
+    public CardData cardData;
+    public bool isShow = false;
 
     private RectTransform rectTransform;
     private Space beforeSpace;
-    private CardData cardData = new CardData();
     private List<CardObject> cardList = new List<CardObject>();
 
     private void Awake()
@@ -23,22 +20,29 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         rectTransform = GetComponent<RectTransform>();
     }
 
-    private void Start()
+    public void InitUI()
     {
-        InitData();
-        InitUI();
-    }
-
-    private void InitData()
-    {
-        cardData.index = index;
-        cardData.rank = rank;
-        cardData.suit = suit;
-    }
-
-    private void InitUI()
-    {
-        tempText.text = $"{cardData.rank}-{cardData.suit}";
+        if (isShow)
+        {
+            tempText.text = $"{cardData.rank}-{cardData.suit}";
+            // 헷갈려서 임시로 색상 설정
+            if (cardData.suit == CardData.Suit.Spade)
+            {
+                GetComponent<Image>().color = Color.skyBlue;
+            }
+            if (cardData.suit == CardData.Suit.Heart)
+            {
+                GetComponent<Image>().color = Color.pink;
+            }
+            if (cardData.suit == CardData.Suit.Clover)
+            {
+                GetComponent<Image>().color = Color.greenYellow;
+            }
+            if (cardData.suit == CardData.Suit.Diamond)
+            {
+                GetComponent<Image>().color = Color.yellow;
+            }
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -146,13 +150,18 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     /// </summary>
     private bool IsCanBeginDrag()
     {
+        if (!isShow)
+        {
+            return false;
+        }
+
         cardList = GetCardList();
         if (cardList == null || cardList.Count == 0)
         {
             return false;
         }
 
-        if (beforeSpace.cardList.Last().index == cardList.Last().index)
+        if (beforeSpace.cardList.Last().cardData.index == cardList.Last().cardData.index)
         {
             return true;
         }
@@ -173,8 +182,8 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         {
             var card = beforeSpace.cardList[i];
             // 리스트에 추가되는 카드 개별 조건 : 1. 동일 수트, 2. 다음 랭크 (내림차순), 3. 다음 순서
-            bool isSameSuit = card.suit == tempCard.suit;
-            bool isNextRank = card.rank == tempCard.rank - 1;
+            bool isSameSuit = card.cardData.suit == tempCard.cardData.suit;
+            bool isNextRank = card.cardData.rank == tempCard.cardData.rank - 1;
             bool isNextCard = i == tempIndex + 1;
 
             if (isSameSuit && isNextRank && isNextCard)
@@ -195,8 +204,8 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         }
 
         var card = afterSpace.cardList.Last();
-        bool isSameSuit = card.suit == this.suit;
-        bool isPrevRank = card.rank == this.rank + 1;
+        bool isSameSuit = card.cardData.suit == this.cardData.suit;
+        bool isPrevRank = card.cardData.rank == this.cardData.rank + 1;
         if (isSameSuit && isPrevRank)
         {
             return true;
