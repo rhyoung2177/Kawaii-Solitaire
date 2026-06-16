@@ -45,13 +45,17 @@ public class Space : MonoBehaviour
 
         // 카드 13장 체크
         if (cardList == null || cardList.Count < suitCount)
+        {
             return false;
+        }
 
         // 마지막 13장 체크 시작 (킹 > 차례대로 > 에이스)
         int startIndex = cardList.Count - suitCount;
 
         if (cardList[startIndex].cardData.rank != CardData.Rank.King)
+        {
             return false;
+        }
 
         for (int i = startIndex; i < cardList.Count - 1; i++)
         {
@@ -62,11 +66,15 @@ public class Space : MonoBehaviour
             bool isNextRank = currentCard.cardData.rank == nextCard.cardData.rank + 1;
 
             if (!isSameSuit || !isNextRank)
+            {
                 return false;
+            }
         }
 
         if (cardList[cardList.Count - 1].cardData.rank != CardData.Rank.Ace)
+        {
             return false;
+        }
 
         return true;
     }

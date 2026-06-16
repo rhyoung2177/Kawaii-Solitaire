@@ -1,20 +1,19 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class InGameManager : MonoBehaviour
 {   
-    public static GameManager Instance { get; private set; }
+    public static InGameManager Instance { get; private set; }
 
-    public const int SET_COUNT = 2;
-    public const int SUIT_COUNT = 4;
     public const int RANK_COUNT = 13;
+    public const int CARD_COUNT = 104;
 
     public Canvas canvas;
     public List<CardObject> cardObjectList;
     public Transform dragLayer; // 카드 이동 시 Space 뎁스보다 위쪽에 위치하게끔 하기 위함
     public List<Space> spaceList;
-    public List<Transform> dummyList;
+    public List<Dummy> dummyList;
     public CardObject cardPrefab;
 
     private List<CardData> cardDataList = new List<CardData>();
@@ -49,15 +48,16 @@ public class GameManager : MonoBehaviour
 
     private void CreateCardData()
     {
-        for (int set = 0; set < 2; set++)
+        int setCount = CARD_COUNT / ((int)RuleManager.Instance.ruleType * RANK_COUNT);
+        for (int set = 0; set < setCount; set++)
         {
-            for (int suit = 0; suit < SUIT_COUNT; suit++)
+            for (int suit = 0; suit < (int) RuleManager.Instance.ruleType; suit++)
             {
                 for (int rank = 0; rank < RANK_COUNT; rank++)
                 {
                     CardData cardData = new CardData()
                     {
-                        index = set * (SUIT_COUNT * RANK_COUNT) + suit * RANK_COUNT + rank,
+                        index = set * ((int)RuleManager.Instance.ruleType * RANK_COUNT) + suit * RANK_COUNT + rank,
                         suit = (CardData.Suit)suit,
                         rank = (CardData.Rank)rank,
                     };
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = cardDataList.Count - 1; i > 0; i--)
         {
-            int randomIndex = UnityEngine.Random.Range(0, i + 1);
+            int randomIndex = Random.Range(0, i + 1);
 
             CardData temp = cardDataList[i];
             cardDataList[i] = cardDataList[randomIndex];
@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
                     cardObject.isShow = true;
                 }
                 cardObject.InitUI();
+                spaceList[i].AddCardObject(cardObject);
             }
         }
 
@@ -112,8 +113,15 @@ public class GameManager : MonoBehaviour
                 cardObject.cardData = cardDataList[cardIndex];
                 cardObjectList.Add(cardObject);
                 cardIndex++;
+                dummyList[i].AddCardObject(cardObject);
             }
         }
+    }
+
+    public void EndDummyOpen(Dummy dummy)
+    {
+        dummyList.Remove(dummy);
+        EndTurn();
     }
 
     public void EndTurn()
@@ -122,5 +130,67 @@ public class GameManager : MonoBehaviour
         {
             space.EndTurn();
         }
+    }
+
+    public void OnClickHintButton()
+    {
+        foreach (var card in GetHintCardList())
+        {
+            // 힌트 1순위 : 동일 수트 이동
+            foreach (var space in spaceList)
+            {
+                if (card.IsCanEndDragOnSameSuit(space))
+                {
+                    var movingCard = card.cardData;
+                    var targetCard = space.cardList.Last().cardData;
+                    Debug.Log($"Move {movingCard.suit}-{movingCard.rank} to {targetCard.suit}-{targetCard.rank}");
+                    return;
+                }
+            }
+        }
+
+        foreach (var card in GetHintCardList())
+        {
+            // 힌트 2순위 : 다른 수트 이동
+            foreach (var space in spaceList)
+            {
+                if (card.IsCanEndDrag(space))
+                {
+                    var movingCard = card.cardData;
+                    var targetCard = space.cardList.Last().cardData;
+                    Debug.Log($"Move {movingCard.suit}-{movingCard.rank} to {targetCard.suit}-{targetCard.rank}");
+                    return;
+                }
+            }
+        }
+
+        // 힌트 3순위 : 더미 오픈
+        foreach (var dummy in dummyList)
+        {
+            if (dummy.gameObject.activeSelf)
+            {
+                Debug.Log($"Open Dummy");
+                return;
+            }
+        }
+
+        // 이동 불가 시 게임 오버
+        Debug.Log("Can't Move / Game Over");
+    }
+
+    private List<CardObject> GetHintCardList()
+    {
+        List<CardObject> hintCardList = new List<CardObject>();
+        foreach (var space in spaceList)
+        {
+            foreach (var card in space.cardList)
+            {
+                if (card.IsCanBeginHint(space))
+                {
+                    hintCardList.Add(card);
+                }
+            }
+        }
+        return hintCardList;
     }
 }

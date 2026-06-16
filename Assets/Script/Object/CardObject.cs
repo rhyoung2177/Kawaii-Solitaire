@@ -50,30 +50,36 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         beforeSpace = this.gameObject.GetComponentInParent<Space>();
 
         if (!IsCanBeginDrag())
+        {
             return;
+        }
 
         // originalParent 설정 후 DragLayer로 카드 부모 변경
         foreach (CardObject card in cardList)
         {
-            card.transform.SetParent(GameManager.Instance.dragLayer);
+            card.transform.SetParent(InGameManager.Instance.dragLayer);
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (!IsCanBeginDrag())
+        {
             return;
+        }
 
         foreach (CardObject card in cardList)
         {
-            card.rectTransform.anchoredPosition += eventData.delta / GameManager.Instance.canvas.scaleFactor;
+            card.rectTransform.anchoredPosition += eventData.delta / InGameManager.Instance.canvas.scaleFactor;
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!IsCanBeginDrag())
+        {
             return;
+        }
 
         Space afterSpace = FindNearestSpace();
         
@@ -99,7 +105,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             LayoutRebuilder.ForceRebuildLayoutImmediate(beforeSpace.GetComponent<RectTransform>());
         }
 
-        GameManager.Instance.EndTurn();
+        InGameManager.Instance.EndTurn();
     }
 
     /// <summary>
@@ -107,7 +113,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     /// </summary>
     private Space FindNearestSpace()
     {
-        List<Space> spaces = GameManager.Instance.spaceList;
+        List<Space> spaces = InGameManager.Instance.spaceList;
 
         Space nearestSpace = null;
         float minDistance = float.MaxValue;
@@ -123,7 +129,9 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             foreach (CardObject card in space.cardList)
             {
                 if (card == this)
+                {
                     continue;
+                }
 
                 float cardDistance = Vector2.Distance(
                     rectTransform.position,
@@ -155,7 +163,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             return false;
         }
 
-        cardList = GetCardList();
+        cardList = GetCardList(beforeSpace);
         if (cardList == null || cardList.Count == 0)
         {
             return false;
@@ -170,17 +178,34 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     }
 
     /// <summary>
+    /// IsCanBeginDrag과 기능은 동일하나, 힌트 기능 추가를 위해 함수 분리
+    /// </summary>
+    public bool IsCanBeginHint(Space space)
+    {
+        if (!isShow)
+            return false;
+
+        var movableCards = GetCardList(space);
+
+        if (movableCards.Count == 0)
+            return false;
+
+        return space.cardList.Last() == movableCards.Last();
+    }
+
+    /// <summary>
     /// 해당 카드 아래 리스트 리턴
     /// </summary>
-    private List<CardObject> GetCardList()
+    private List<CardObject> GetCardList(Space space)
     {
         List<CardObject> tempCardList = new List<CardObject>();
         CardObject tempCard = this;
         tempCardList.Add(tempCard);
-        int tempIndex = beforeSpace.cardList.IndexOf(this);
-        for (int i = tempIndex; i < beforeSpace.cardList.Count; i++)
+
+        int tempIndex = space.cardList.IndexOf(this);
+        for (int i = tempIndex; i < space.cardList.Count; i++)
         {
-            var card = beforeSpace.cardList[i];
+            var card = space.cardList[i];
             // 리스트에 추가되는 카드 개별 조건 : 1. 동일 수트, 2. 다음 랭크 (내림차순), 3. 다음 순서
             bool isSameSuit = card.cardData.suit == tempCard.cardData.suit;
             bool isNextRank = card.cardData.rank == tempCard.cardData.rank - 1;
@@ -196,7 +221,26 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         return tempCardList;
     }
 
-    private bool IsCanEndDrag(Space afterSpace)
+    public bool IsCanEndDrag(Space afterSpace)
+    {
+        if (afterSpace.cardList == null || afterSpace.cardList.Count == 0)
+        {
+            return true;
+        }
+
+        var card = afterSpace.cardList.Last();
+        if (card.cardData.rank == this.cardData.rank + 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// IsCanEndDrag에 수트 조건 추가 (힌트 기능에 사용)
+    /// </summary>
+    public bool IsCanEndDragOnSameSuit(Space afterSpace)
     {
         if (afterSpace.cardList == null || afterSpace.cardList.Count == 0)
         {
