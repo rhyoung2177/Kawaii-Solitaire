@@ -23,9 +23,10 @@ public class Space : MonoBehaviour
         }
 
         // 완료한 수트 있는지 체크
-        if (HasCompletedSuit())
+        var completedCardList = GetCompletedCardList();
+        if (completedCardList != null)
         {
-            Debug.Log($"CompleteOneSuit");
+            InGameManager.Instance.CompleteOneSuit(completedCardList);
         }
     }
 
@@ -39,14 +40,14 @@ public class Space : MonoBehaviour
         cardList.Remove(cardObject);
     }
 
-    public bool HasCompletedSuit()
+    public List<CardObject> GetCompletedCardList()
     {
         int suitCount = Enum.GetValues(typeof(CardData.Rank)).Length;
 
         // 카드 13장 체크
         if (cardList == null || cardList.Count < suitCount)
         {
-            return false;
+            return null;
         }
 
         // 마지막 13장 체크 시작 (킹 > 차례대로 > 에이스)
@@ -54,7 +55,7 @@ public class Space : MonoBehaviour
 
         if (cardList[startIndex].cardData.rank != CardData.Rank.King)
         {
-            return false;
+            return null;
         }
 
         for (int i = startIndex; i < cardList.Count - 1; i++)
@@ -67,15 +68,21 @@ public class Space : MonoBehaviour
 
             if (!isSameSuit || !isNextRank)
             {
-                return false;
+                return null;
             }
         }
 
         if (cardList[cardList.Count - 1].cardData.rank != CardData.Rank.Ace)
         {
-            return false;
+            return null;
         }
 
-        return true;
+        List<CardObject> completedCardList = new List<CardObject>();
+        for (int i = startIndex; i < cardList.Count; i++)
+        {
+            completedCardList.Add(cardList[i]);
+        }
+
+        return completedCardList;
     }
 }

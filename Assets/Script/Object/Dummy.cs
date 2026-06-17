@@ -20,7 +20,7 @@ public class Dummy : MonoBehaviour
             space.AddCardObject(cardList[i]);
         }
         cardList.Clear();
-        InGameManager.Instance.EndDummyOpen(this);
+        InGameManager.Instance.EndTurn();
         gameObject.SetActive(false);
     }
 

@@ -24,24 +24,33 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         if (isShow)
         {
-            tempText.text = $"{cardData.rank}-{cardData.suit}";
             // 헷갈려서 임시로 색상 설정
             if (cardData.suit == CardData.Suit.Spade)
             {
-                GetComponent<Image>().color = Color.skyBlue;
+                tempText.text = "";
+                GetComponent<Image>().sprite = Resources.Load<Sprite>($"UI/Card/{(int)cardData.suit}_{(int)cardData.rank}");
             }
-            if (cardData.suit == CardData.Suit.Heart)
+            else
             {
-                GetComponent<Image>().color = Color.pink;
+                tempText.text = $"{cardData.rank}-{cardData.suit}";
+                if (cardData.suit == CardData.Suit.Heart)
+                {
+                    GetComponent<Image>().color = Color.pink;
+                }
+                if (cardData.suit == CardData.Suit.Clover)
+                {
+                    GetComponent<Image>().color = Color.greenYellow;
+                }
+                if (cardData.suit == CardData.Suit.Diamond)
+                {
+                    GetComponent<Image>().color = Color.yellow;
+                }
             }
-            if (cardData.suit == CardData.Suit.Clover)
-            {
-                GetComponent<Image>().color = Color.greenYellow;
-            }
-            if (cardData.suit == CardData.Suit.Diamond)
-            {
-                GetComponent<Image>().color = Color.yellow;
-            }
+        }
+        else
+        {
+            tempText.text = "000000";
+            GetComponent<Image>().color = Color.white;
         }
     }
 

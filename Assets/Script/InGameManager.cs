@@ -1,6 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameManager : MonoBehaviour
 {   
@@ -14,9 +15,12 @@ public class InGameManager : MonoBehaviour
     public Transform dragLayer; // 카드 이동 시 Space 뎁스보다 위쪽에 위치하게끔 하기 위함
     public List<Space> spaceList;
     public List<Dummy> dummyList;
+    public List<GameObject> clearDummyList;
     public CardObject cardPrefab;
 
+
     private List<CardData> cardDataList = new List<CardData>();
+    private Stack<GameSnapshot> gameSnapshots = new Stack<GameSnapshot>();
 
     private void Awake()
     {
@@ -32,6 +36,7 @@ public class InGameManager : MonoBehaviour
     private void Start()
     {
         StartGame();
+        SaveSnapshot();
     }
 
     private void StartGame()
@@ -48,16 +53,18 @@ public class InGameManager : MonoBehaviour
 
     private void CreateCardData()
     {
-        int setCount = CARD_COUNT / ((int)RuleManager.Instance.ruleType * RANK_COUNT);
+        int ruleType = RuleManager.Instance == null ? 1 : (int) RuleManager.Instance.ruleType;
+
+        int setCount = CARD_COUNT / (ruleType * RANK_COUNT);
         for (int set = 0; set < setCount; set++)
         {
-            for (int suit = 0; suit < (int) RuleManager.Instance.ruleType; suit++)
+            for (int suit = 0; suit < ruleType; suit++)
             {
                 for (int rank = 0; rank < RANK_COUNT; rank++)
                 {
                     CardData cardData = new CardData()
                     {
-                        index = set * ((int)RuleManager.Instance.ruleType * RANK_COUNT) + suit * RANK_COUNT + rank,
+                        index = set * (ruleType * RANK_COUNT) + suit * RANK_COUNT + rank,
                         suit = (CardData.Suit)suit,
                         rank = (CardData.Rank)rank,
                     };
@@ -118,18 +125,13 @@ public class InGameManager : MonoBehaviour
         }
     }
 
-    public void EndDummyOpen(Dummy dummy)
-    {
-        dummyList.Remove(dummy);
-        EndTurn();
-    }
-
     public void EndTurn()
     {
         foreach (Space space in spaceList)
         {
             space.EndTurn();
         }
+        SaveSnapshot();
     }
 
     public void OnClickHintButton()
@@ -192,5 +194,143 @@ public class InGameManager : MonoBehaviour
             }
         }
         return hintCardList;
+    }
+
+    public void OnClickUndoButton()
+    {
+        if (gameSnapshots == null || gameSnapshots.Count <= 1)
+        {
+            return;
+        }
+
+        GameSnapshot snapshot = gameSnapshots.Pop();
+
+        if (gameSnapshots.Count == 0)
+        {
+            return;
+        }
+
+        RestoreSnapshot(gameSnapshots.Peek());
+    }
+    public void OnClickRestartButton()
+    {
+        if (gameSnapshots == null)
+        {
+            return;
+        }
+
+        RestoreSnapshot(gameSnapshots.Last());
+        gameSnapshots.Clear();
+        SaveSnapshot();
+    }
+
+    private void SaveSnapshot()
+    {
+        GameSnapshot snapshot = new();
+
+        foreach (CardObject card in cardObjectList)
+        {
+            CardState state = new()
+            {
+                cardIndex = card.cardData.index,
+                isShow = card.isShow,
+                siblingIndex = card.transform.GetSiblingIndex()
+            };
+
+            Space space = card.GetComponentInParent<Space>();
+            Dummy dummy = card.GetComponentInParent<Dummy>();
+
+            if (space != null)
+            {
+                state.parentType = 0;
+                state.parentIndex = spaceList.IndexOf(space);
+            }
+            else if (dummy != null)
+            {
+                state.parentType = 1;
+                state.parentIndex = dummyList.IndexOf(dummy);
+            }
+
+            snapshot.cardStates.Add(state);
+        }
+
+        gameSnapshots.Push(snapshot);
+    }
+
+    private void RestoreSnapshot(GameSnapshot snapshot)
+    {
+        foreach (Space space in spaceList)
+        {
+            space.cardList.Clear();
+        }
+
+        foreach (Dummy dummy in dummyList)
+        {
+            dummy.cardList.Clear();
+        }
+
+        foreach (CardState state in snapshot.cardStates)
+        {
+            CardObject card = cardObjectList.Find(x => x.cardData.index == state.cardIndex);
+
+            if (card == null)
+            {
+                continue;
+            }
+
+            card.isShow = state.isShow;
+
+            if (state.parentType == 0)
+            {
+                Space space = spaceList[state.parentIndex];
+
+                card.transform.SetParent(space.transform);
+                space.AddCardObject(card);
+            }
+            else
+            {
+                Dummy dummy = dummyList[state.parentIndex];
+
+                card.transform.SetParent(dummy.transform);
+                dummy.AddCardObject(card);
+                card.transform.localPosition = new Vector2(0, 0);
+                if (!dummy.gameObject.activeSelf)
+                {
+                    dummy.gameObject.SetActive(true);
+                }
+            }
+
+            card.transform.SetSiblingIndex(state.siblingIndex);
+
+            card.InitUI();
+        }
+
+        foreach (Space space in spaceList)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(
+                space.GetComponent<RectTransform>());
+        }
+    }
+
+    public void CompleteOneSuit(List<CardObject> completedCardList)
+    {
+        foreach (var clearDummy in clearDummyList)
+        {
+            if (!clearDummy.activeSelf)
+            {
+                clearDummy.SetActive(true);
+                foreach (var card in completedCardList)
+                {
+                    card.transform.SetParent(clearDummy.transform);
+                    card.transform.localPosition = new Vector2(0, 0);
+                }
+                return;
+            }
+        }
+    }
+
+    public void CompleteAllSuit()
+    {
+        Debug.Log($"CompleteAllSuit");
     }
 }
