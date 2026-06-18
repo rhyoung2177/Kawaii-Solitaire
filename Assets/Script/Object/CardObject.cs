@@ -50,6 +50,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         else
         {
             tempText.text = "000000";
+            GetComponent<Image>().sprite = null;
             GetComponent<Image>().color = Color.white;
         }
     }

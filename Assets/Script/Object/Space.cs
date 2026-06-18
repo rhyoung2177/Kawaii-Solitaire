@@ -14,12 +14,15 @@ public class Space : MonoBehaviour
 
     public void EndTurn()
     {
-        var lastCard = cardList.Last();
-        // 마지막 카드 안 열려 있으면 오픈
-        if (lastCard.isShow == false)
+        if (cardList != null && cardList.Count > 0)
         {
-            lastCard.isShow = true;
-            lastCard.InitUI();
+            var lastCard = cardList.Last();
+            // 마지막 카드 안 열려 있으면 오픈
+            if (lastCard.isShow == false)
+            {
+                lastCard.isShow = true;
+                lastCard.InitUI();
+            }
         }
 
         // 완료한 수트 있는지 체크

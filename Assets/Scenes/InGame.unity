@@ -777,13 +777,14 @@ GameObject:
   - component: {fileID: 120559358}
   - component: {fileID: 120559357}
   - component: {fileID: 120559356}
+  - component: {fileID: 120559359}
   m_Layer: 5
   m_Name: ClearDummy7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &120559356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -804,7 +805,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -836,11 +837,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &120559359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120559355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &130278640
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,13 +867,14 @@ GameObject:
   - component: {fileID: 130278643}
   - component: {fileID: 130278642}
   - component: {fileID: 130278641}
+  - component: {fileID: 130278644}
   m_Layer: 5
   m_Name: ClearDummy3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &130278641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -879,7 +895,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -911,11 +927,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 395, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &130278644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130278640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &144669790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,13 +1094,14 @@ GameObject:
   - component: {fileID: 166931246}
   - component: {fileID: 166931245}
   - component: {fileID: 166931244}
+  - component: {fileID: 166931247}
   m_Layer: 5
   m_Name: ClearDummy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &166931244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1091,7 +1122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1123,11 +1154,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &166931247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166931243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &176962276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1707,13 +1752,14 @@ GameObject:
   - component: {fileID: 565873610}
   - component: {fileID: 565873609}
   - component: {fileID: 565873608}
+  - component: {fileID: 565873611}
   m_Layer: 5
   m_Name: ClearDummy6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &565873608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1734,7 +1780,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1766,11 +1812,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 893, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &565873611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565873607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2219,14 +2279,14 @@ MonoBehaviour:
   - {fileID: 1246012653}
   - {fileID: 2063537542}
   clearDummyList:
-  - {fileID: 166931243}
-  - {fileID: 1918022524}
-  - {fileID: 130278640}
-  - {fileID: 2090872273}
-  - {fileID: 1039713361}
-  - {fileID: 565873607}
-  - {fileID: 120559355}
-  - {fileID: 2015832024}
+  - {fileID: 166931247}
+  - {fileID: 1918022528}
+  - {fileID: 130278644}
+  - {fileID: 2090872277}
+  - {fileID: 1039713365}
+  - {fileID: 565873611}
+  - {fileID: 120559359}
+  - {fileID: 2015832028}
   cardPrefab: {fileID: 6534621173649223365, guid: f72f0e813dd3aa64eb542a9b426b29ce, type: 3}
 --- !u!1 &823068393
 GameObject:
@@ -2534,13 +2594,14 @@ GameObject:
   - component: {fileID: 1039713364}
   - component: {fileID: 1039713363}
   - component: {fileID: 1039713362}
+  - component: {fileID: 1039713365}
   m_Layer: 5
   m_Name: ClearDummy5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1039713362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2561,7 +2622,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2593,11 +2654,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 727, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1039713365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039713361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &1238152970
 GameObject:
   m_ObjectHideFlags: 0
@@ -3499,13 +3574,14 @@ GameObject:
   - component: {fileID: 1918022527}
   - component: {fileID: 1918022526}
   - component: {fileID: 1918022525}
+  - component: {fileID: 1918022528}
   m_Layer: 5
   m_Name: ClearDummy2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1918022525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3526,7 +3602,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3558,11 +3634,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 229, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1918022528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918022524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &1958756705
 GameObject:
   m_ObjectHideFlags: 0
@@ -3755,13 +3845,14 @@ GameObject:
   - component: {fileID: 2015832027}
   - component: {fileID: 2015832026}
   - component: {fileID: 2015832025}
+  - component: {fileID: 2015832028}
   m_Layer: 5
   m_Name: ClearDummy8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2015832025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3782,7 +3873,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3814,11 +3905,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1225, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2015832028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015832024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &2063537537
 GameObject:
   m_ObjectHideFlags: 0
@@ -4090,13 +4195,14 @@ GameObject:
   - component: {fileID: 2090872276}
   - component: {fileID: 2090872275}
   - component: {fileID: 2090872274}
+  - component: {fileID: 2090872277}
   m_Layer: 5
   m_Name: ClearDummy4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2090872274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4117,7 +4223,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4149,11 +4255,25 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1815928686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 561, y: -88}
-  m_SizeDelta: {x: 126, y: 176}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2090872277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090872273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad6587dc2420d6489faa60715a18333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearDummy
+  cardList: []
+  IsClear: 0
 --- !u!1 &2146833864
 GameObject:
   m_ObjectHideFlags: 0

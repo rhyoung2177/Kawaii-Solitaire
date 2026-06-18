@@ -1,19 +1,24 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class GameSnapshot
+
+public class SnapShotData
 {
-    public List<CardState> cardStates = new();
+    public List<SpaceData> spaceList = new List<SpaceData>();
+    public List<DummyData> dummyList = new List<DummyData>();
+    public List<ClearDummyData> clearDummyList = new List<ClearDummyData>();
 }
 
-public class CardState
+public class SpaceData
 {
-    public int cardIndex;
+    // Key : 카드 Index 값, Value : 카드 isShow 값
+    public List<(int, bool)> cardStateList = new List<(int, bool)>();
+}
 
-    public bool isShow;
-
-    public int parentType;    // 0 = Space, 1 = Dummy
-
-    public int parentIndex;
-
-    public int siblingIndex;
+public class DummyData
+{
+    public List<int> cardIndexList = new List<int>();
+}
+public class ClearDummyData
+{
+    public List<int> cardIndexList = new List<int>();
 }

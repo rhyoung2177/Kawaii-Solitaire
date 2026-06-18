@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,12 +16,12 @@ public class InGameManager : MonoBehaviour
     public Transform dragLayer; // 카드 이동 시 Space 뎁스보다 위쪽에 위치하게끔 하기 위함
     public List<Space> spaceList;
     public List<Dummy> dummyList;
-    public List<GameObject> clearDummyList;
+    public List<ClearDummy> clearDummyList;
     public CardObject cardPrefab;
 
 
     private List<CardData> cardDataList = new List<CardData>();
-    private Stack<GameSnapshot> gameSnapshots = new Stack<GameSnapshot>();
+    private Stack<SnapShotData> snapShotDataStack = new Stack<SnapShotData>();
 
     private void Awake()
     {
@@ -198,66 +199,76 @@ public class InGameManager : MonoBehaviour
 
     public void OnClickUndoButton()
     {
-        if (gameSnapshots == null || gameSnapshots.Count <= 1)
+        if (snapShotDataStack == null || snapShotDataStack.Count <= 1)
         {
             return;
         }
 
-        GameSnapshot snapshot = gameSnapshots.Pop();
+        SnapShotData snapshot = snapShotDataStack.Pop();
 
-        if (gameSnapshots.Count == 0)
+        if (snapShotDataStack.Count == 0)
         {
             return;
         }
 
-        RestoreSnapshot(gameSnapshots.Peek());
+        RestoreSnapshot(snapShotDataStack.Peek());
     }
     public void OnClickRestartButton()
     {
-        if (gameSnapshots == null)
+        if (snapShotDataStack == null)
         {
             return;
         }
 
-        RestoreSnapshot(gameSnapshots.Last());
-        gameSnapshots.Clear();
+        RestoreSnapshot(snapShotDataStack.Last());
+        snapShotDataStack.Clear();
         SaveSnapshot();
     }
 
     private void SaveSnapshot()
     {
-        GameSnapshot snapshot = new();
-
-        foreach (CardObject card in cardObjectList)
+        SnapShotData snapshot = new();
+        foreach (var space in spaceList)
         {
-            CardState state = new()
+            if (space.cardList != null && space.cardList.Count > 0)
             {
-                cardIndex = card.cardData.index,
-                isShow = card.isShow,
-                siblingIndex = card.transform.GetSiblingIndex()
-            };
-
-            Space space = card.GetComponentInParent<Space>();
-            Dummy dummy = card.GetComponentInParent<Dummy>();
-
-            if (space != null)
-            {
-                state.parentType = 0;
-                state.parentIndex = spaceList.IndexOf(space);
+                var spaceData = new SpaceData();
+                foreach (var card in space.cardList)
+                {
+                    spaceData.cardStateList.Add((card.cardData.index, card.isShow));
+                }
+                snapshot.spaceList.Add(spaceData);
             }
-            else if (dummy != null)
+        }
+        foreach (var dummy in dummyList)
+        {
+            if (dummy.cardList != null && dummy.cardList.Count > 0)
             {
-                state.parentType = 1;
-                state.parentIndex = dummyList.IndexOf(dummy);
+                var dummyData = new DummyData();
+                foreach (var card in dummy.cardList)
+                {
+                    dummyData.cardIndexList.Add(card.cardData.index);
+                }
+                snapshot.dummyList.Add(dummyData);
             }
-
-            snapshot.cardStates.Add(state);
+        }
+        foreach (var clearDummy in clearDummyList)
+        {
+            if (clearDummy.cardList != null && clearDummy.cardList.Count > 0)
+            {
+                var clearDummyData = new ClearDummyData();
+                foreach (var card in clearDummy.cardList)
+                {
+                    clearDummyData.cardIndexList.Add(card.cardData.index);
+                }
+                snapshot.clearDummyList.Add(clearDummyData);
+            }
         }
 
-        gameSnapshots.Push(snapshot);
+        snapShotDataStack.Push(snapshot);
     }
 
-    private void RestoreSnapshot(GameSnapshot snapshot)
+    private void RestoreSnapshot(SnapShotData snapshot)
     {
         foreach (Space space in spaceList)
         {
@@ -269,46 +280,79 @@ public class InGameManager : MonoBehaviour
             dummy.cardList.Clear();
         }
 
-        foreach (CardState state in snapshot.cardStates)
+        foreach (ClearDummy clearDummy in clearDummyList)
         {
-            CardObject card = cardObjectList.Find(x => x.cardData.index == state.cardIndex);
+            clearDummy.cardList.Clear();
+        }
 
-            if (card == null)
+        for (int i = 0; i < snapshot.spaceList.Count; i++)
+        {
+            Space space = spaceList[i];
+            SpaceData spaceData = snapshot.spaceList[i];
+
+            foreach (var pair in spaceData.cardStateList)
             {
-                continue;
-            }
+                int cardIndex = pair.Item1;
+                bool isShow = pair.Item2;
 
-            card.isShow = state.isShow;
+                CardObject card = cardObjectList.Find(x => x.cardData.index == cardIndex);
 
-            if (state.parentType == 0)
-            {
-                Space space = spaceList[state.parentIndex];
+                if (card == null)
+                {
+                    continue;
+                }
+
+                card.isShow = isShow;
 
                 card.transform.SetParent(space.transform);
                 space.AddCardObject(card);
-            }
-            else
-            {
-                Dummy dummy = dummyList[state.parentIndex];
 
-                card.transform.SetParent(dummy.transform);
-                dummy.AddCardObject(card);
-                card.transform.localPosition = new Vector2(0, 0);
-                if (!dummy.gameObject.activeSelf)
-                {
-                    dummy.gameObject.SetActive(true);
-                }
+                card.InitUI();
             }
 
-            card.transform.SetSiblingIndex(state.siblingIndex);
-
-            card.InitUI();
-        }
-
-        foreach (Space space in spaceList)
-        {
             LayoutRebuilder.ForceRebuildLayoutImmediate(
                 space.GetComponent<RectTransform>());
+        }
+
+        for (int i = 0; i < snapshot.dummyList.Count; i++)
+        {
+            Dummy dummy = dummyList[i];
+            DummyData dummyData = snapshot.dummyList[i];
+
+            foreach (int cardIndex in dummyData.cardIndexList)
+            {
+                CardObject card = cardObjectList.Find(x => x.cardData.index == cardIndex);
+
+                card.transform.SetParent(dummy.transform);
+                card.transform.localPosition = Vector2.zero;
+                dummy.AddCardObject(card);
+                card.InitUI();
+            }
+        }
+
+        for (int i = 0; i < snapshot.clearDummyList.Count; i++)
+        {
+            ClearDummy clearDummy = clearDummyList[i];
+            ClearDummyData clearDummyData = snapshot.clearDummyList[i];
+
+            foreach (int cardIndex in clearDummyData.cardIndexList)
+            {
+                CardObject card = cardObjectList.Find(x => x.cardData.index == cardIndex);
+
+                card.transform.SetParent(clearDummy.transform);
+                card.transform.localPosition = Vector2.zero;
+                clearDummy.AddCardObject(card);
+                clearDummy.IsClear = true;
+                card.InitUI();
+            }
+        }
+
+        if (snapshot.clearDummyList.Count == 0)
+        {
+            foreach (var clearDummy in clearDummyList)
+            {
+                clearDummy.IsClear = false;
+            }
         }
     }
 
@@ -316,13 +360,16 @@ public class InGameManager : MonoBehaviour
     {
         foreach (var clearDummy in clearDummyList)
         {
-            if (!clearDummy.activeSelf)
+            if (!clearDummy.gameObject.activeSelf)
             {
-                clearDummy.SetActive(true);
+                clearDummy.IsClear = true;
+                clearDummy.cardList = completedCardList;
+
                 foreach (var card in completedCardList)
                 {
+                    card.isShow = false;
                     card.transform.SetParent(clearDummy.transform);
-                    card.transform.localPosition = new Vector2(0, 0);
+                    card.transform.localPosition = Vector2.zero;
                 }
                 return;
             }
