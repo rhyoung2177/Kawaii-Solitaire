@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public TextMeshProUGUI tempText;
     public CardData cardData;
     public bool isShow = false;
 
@@ -24,34 +22,11 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         if (isShow)
         {
-            // 헷갈려서 임시로 색상 설정
-            if (cardData.suit == CardData.Suit.Spade)
-            {
-                tempText.text = "";
-                GetComponent<Image>().sprite = Resources.Load<Sprite>($"UI/Card/{(int)cardData.suit}_{(int)cardData.rank}");
-            }
-            else
-            {
-                tempText.text = $"{cardData.rank}-{cardData.suit}";
-                if (cardData.suit == CardData.Suit.Heart)
-                {
-                    GetComponent<Image>().color = Color.pink;
-                }
-                if (cardData.suit == CardData.Suit.Clover)
-                {
-                    GetComponent<Image>().color = Color.greenYellow;
-                }
-                if (cardData.suit == CardData.Suit.Diamond)
-                {
-                    GetComponent<Image>().color = Color.yellow;
-                }
-            }
+            GetComponent<Image>().sprite = Resources.Load<Sprite>($"UI/Card/{(int)cardData.suit}_{(int)cardData.rank}");
         }
         else
         {
-            tempText.text = "000000";
-            GetComponent<Image>().sprite = null;
-            GetComponent<Image>().color = Color.white;
+            GetComponent<Image>().sprite = Resources.Load<Sprite>($"UI/Card/card");
         }
     }
 

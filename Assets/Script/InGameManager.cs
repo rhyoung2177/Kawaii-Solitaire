@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -326,8 +325,10 @@ public class InGameManager : MonoBehaviour
                 card.transform.SetParent(dummy.transform);
                 card.transform.localPosition = Vector2.zero;
                 dummy.AddCardObject(card);
+                card.isShow = false;
                 card.InitUI();
             }
+            dummy.gameObject.SetActive(true);
         }
 
         for (int i = 0; i < snapshot.clearDummyList.Count; i++)

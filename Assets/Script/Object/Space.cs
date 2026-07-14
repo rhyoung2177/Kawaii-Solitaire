@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Space : MonoBehaviour
 {
     [HideInInspector] public List<CardObject> cardList = new List<CardObject>();
+
+    private const int MAX_COUNT = 10;
+    private const float DEFAULT_SPACING = -120f;
 
     public void Init()
     {
@@ -24,6 +28,9 @@ public class Space : MonoBehaviour
                 lastCard.InitUI();
             }
         }
+
+        // 카드 정렬
+        RefreshSpacing();
 
         // 완료한 수트 있는지 체크
         var completedCardList = GetCompletedCardList();
@@ -87,5 +94,23 @@ public class Space : MonoBehaviour
         }
 
         return completedCardList;
+    }
+    public void RefreshSpacing()
+    {
+        GridLayoutGroup gridLayoutGroup = GetComponent<GridLayoutGroup>();
+
+        float spacing = DEFAULT_SPACING;
+
+        if (cardList.Count > MAX_COUNT)
+        {
+            float defaultStep = gridLayoutGroup.cellSize.y + DEFAULT_SPACING;
+            float maxHeight = (MAX_COUNT - 1) * defaultStep;
+
+            float step = maxHeight / (cardList.Count - 1);
+
+            spacing = step - gridLayoutGroup.cellSize.y;
+        }
+
+        gridLayoutGroup.spacing = new Vector2(gridLayoutGroup.spacing.x, spacing);
     }
 }
