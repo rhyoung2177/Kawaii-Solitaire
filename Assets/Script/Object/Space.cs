@@ -37,6 +37,13 @@ public class Space : MonoBehaviour
         if (completedCardList != null)
         {
             InGameManager.Instance.CompleteOneSuit(completedCardList);
+            foreach (var card in completedCardList)
+            {
+                if (cardList.Contains(card))
+                {
+                    cardList.Remove(card);
+                }
+            }
         }
     }
 

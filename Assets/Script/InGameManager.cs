@@ -9,6 +9,11 @@ public class InGameManager : MonoBehaviour
 
     public const int RANK_COUNT = 13;
     public const int CARD_COUNT = 104;
+    public const int SET_COUNT = 8;
+
+    public int score = 0;
+    public int move = 0;
+    public int completeSet = 0;
 
     public Canvas canvas;
     public List<CardObject> cardObjectList;
@@ -44,6 +49,7 @@ public class InGameManager : MonoBehaviour
         CreateCardData();
         ShuffleCardData();
         CreateCardObject();
+        UIManager.Instance.SetText();
 
         foreach (var space in spaceList)
         {
@@ -134,7 +140,7 @@ public class InGameManager : MonoBehaviour
         SaveSnapshot();
     }
 
-    public void OnClickHintButton()
+    public void GetHint()
     {
         foreach (var card in GetHintCardList())
         {
@@ -196,7 +202,7 @@ public class InGameManager : MonoBehaviour
         return hintCardList;
     }
 
-    public void OnClickUndoButton()
+    public void Undo()
     {
         if (snapShotDataStack == null || snapShotDataStack.Count <= 1)
         {
@@ -212,7 +218,7 @@ public class InGameManager : MonoBehaviour
 
         RestoreSnapshot(snapShotDataStack.Peek());
     }
-    public void OnClickRestartButton()
+    public void Restart()
     {
         if (snapShotDataStack == null)
         {
@@ -309,8 +315,8 @@ public class InGameManager : MonoBehaviour
                 card.InitUI();
             }
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(
-                space.GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(space.GetComponent<RectTransform>());
+            space.RefreshSpacing();
         }
 
         for (int i = 0; i < snapshot.dummyList.Count; i++)
@@ -361,8 +367,8 @@ public class InGameManager : MonoBehaviour
     {
         foreach (var clearDummy in clearDummyList)
         {
-            if (!clearDummy.gameObject.activeSelf)
-            {
+            if (clearDummy.transform.childCount == 0)
+            { 
                 clearDummy.IsClear = true;
                 clearDummy.cardList = completedCardList;
 
