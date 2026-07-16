@@ -3,6 +3,13 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum RuleType
+{
+    OneSuit = 1,
+    TwoSuit = 2,
+    FourSuit = 4
+}
+
 public class InGameManager : MonoBehaviour
 {   
     public static InGameManager Instance { get; private set; }
@@ -11,9 +18,37 @@ public class InGameManager : MonoBehaviour
     public const int CARD_COUNT = 104;
     public const int SET_COUNT = 8;
 
-    public int score = 0;
-    public int move = 0;
-    public int completeSet = 0;
+    private int score;
+    private int move;
+    private int completeSet;
+
+    public int Score
+    {
+        get => score;
+        set
+        {
+            score = value;
+            UIManager.Instance.SetScoreText();
+        }
+    }
+    public int Move
+    {
+        get => move;
+        set
+        {
+            move = value;
+            UIManager.Instance.SetMoveText();
+        }
+    }
+    public int CompleteSet
+    {
+        get => completeSet;
+        set
+        {
+            completeSet = value;
+            UIManager.Instance.SetCompleteSetText();
+        }
+    }
 
     public Canvas canvas;
     public List<CardObject> cardObjectList;
@@ -22,7 +57,6 @@ public class InGameManager : MonoBehaviour
     public List<Dummy> dummyList;
     public List<ClearDummy> clearDummyList;
     public CardObject cardPrefab;
-
 
     private List<CardData> cardDataList = new List<CardData>();
     private Stack<SnapShotData> snapShotDataStack = new Stack<SnapShotData>();
@@ -49,7 +83,7 @@ public class InGameManager : MonoBehaviour
         CreateCardData();
         ShuffleCardData();
         CreateCardObject();
-        UIManager.Instance.SetText();
+        InitData();
 
         foreach (var space in spaceList)
         {
@@ -57,9 +91,16 @@ public class InGameManager : MonoBehaviour
         }
     }
 
+    private void InitData()
+    {
+        Score = 0;
+        Move = 0;
+        CompleteSet = 0;
+    }
+
     private void CreateCardData()
     {
-        int ruleType = RuleManager.Instance == null ? 1 : (int) RuleManager.Instance.ruleType;
+        int ruleType = RuleManager.Instance == null ? 1 : (int) RuleManager.Instance.cardTypeList.Count;
 
         int setCount = CARD_COUNT / (ruleType * RANK_COUNT);
         for (int set = 0; set < setCount; set++)
@@ -71,7 +112,7 @@ public class InGameManager : MonoBehaviour
                     CardData cardData = new CardData()
                     {
                         index = set * (ruleType * RANK_COUNT) + suit * RANK_COUNT + rank,
-                        suit = (CardData.Suit)suit,
+                        suit = RuleManager.Instance.cardTypeList[suit],
                         rank = (CardData.Rank)rank,
                     };
 
@@ -137,7 +178,23 @@ public class InGameManager : MonoBehaviour
         {
             space.EndTurn();
         }
+
+        Move++;
+        SetCompleteSetCount();
         SaveSnapshot();
+    }
+
+    public void SetCompleteSetCount()
+    {
+        int tempCount = 0;
+        foreach (ClearDummy clearDummy in clearDummyList)
+        {
+            if (clearDummy.transform.childCount > 0)
+            {
+                tempCount++;
+            }
+        }
+        CompleteSet = tempCount;
     }
 
     public void GetHint()
@@ -217,6 +274,8 @@ public class InGameManager : MonoBehaviour
         }
 
         RestoreSnapshot(snapShotDataStack.Peek());
+        Move++;
+        SetCompleteSetCount();
     }
     public void Restart()
     {
@@ -228,6 +287,7 @@ public class InGameManager : MonoBehaviour
         RestoreSnapshot(snapShotDataStack.Last());
         snapShotDataStack.Clear();
         SaveSnapshot();
+        InitData();
     }
 
     private void SaveSnapshot()
@@ -368,7 +428,7 @@ public class InGameManager : MonoBehaviour
         foreach (var clearDummy in clearDummyList)
         {
             if (clearDummy.transform.childCount == 0)
-            { 
+            {
                 clearDummy.IsClear = true;
                 clearDummy.cardList = completedCardList;
 

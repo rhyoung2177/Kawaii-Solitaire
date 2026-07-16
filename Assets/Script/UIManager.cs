@@ -1,13 +1,15 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    public Text scoreText;
-    public Text moveText;
-    public Text setText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI moveText;
+    public TextMeshProUGUI setText;
 
     private void Awake()
     {
@@ -20,11 +22,19 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
-    public void SetText()
+    public void SetScoreText()
     {
-        scoreText.text = InGameManager.Instance.score.ToString();
-        moveText.text = InGameManager.Instance.move.ToString();
-        setText.text = $"{InGameManager.Instance.completeSet}/{InGameManager.SET_COUNT}";
+        scoreText.text = InGameManager.Instance.Score.ToString();
+    }
+
+    public void SetMoveText()
+    {
+        moveText.text = InGameManager.Instance.Move.ToString();
+    }
+
+    public void SetCompleteSetText()
+    {
+        setText.text = $"{InGameManager.Instance.CompleteSet}/{InGameManager.SET_COUNT}";
     }
 
     public void OnClickHintButton()
@@ -44,6 +54,7 @@ public class UIManager : MonoBehaviour
 
     public void OnClickMenuButton()
     {
+        SceneManager.LoadScene("Menu");
         // 위에서 서랍 내려오는 애니메이션
     }
 }

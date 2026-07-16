@@ -79,6 +79,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
                 card.transform.SetSiblingIndex(afterSpace.transform.childCount - 1);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(afterSpace.GetComponent<RectTransform>());
+            InGameManager.Instance.EndTurn();
         }
         // Space 미선택 시 기존 Space로 복귀
         else
@@ -89,8 +90,6 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(beforeSpace.GetComponent<RectTransform>());
         }
-
-        InGameManager.Instance.EndTurn();
     }
 
     /// <summary>
