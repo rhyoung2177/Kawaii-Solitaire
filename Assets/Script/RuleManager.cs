@@ -34,9 +34,10 @@ public class RuleManager : MonoBehaviour
             }
         }
 
-        if (cardTypeList.Count == 3)
+        if (cardTypeList.Count == 0 || cardTypeList.Count == 3)
         {
-            Debug.Log("2개나 4개로 하셈");
+            var popup = PopupManager.Instance.OpenPopup();
+            popup.Open("You Can't Select 3. Select 1, 2, 4");
             return;
         }
 

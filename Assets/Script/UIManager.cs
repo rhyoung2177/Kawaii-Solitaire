@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI moveText;
     public TextMeshProUGUI setText;
+
+    public RectTransform drawer;
 
     private void Awake()
     {
@@ -51,10 +54,19 @@ public class UIManager : MonoBehaviour
     {
         InGameManager.Instance.Restart();
     }
+    public void OnClickSettingButton()
+    {
+        var popup = PopupManager.Instance.OpenPopup();
+        popup.Open("Make Setting Popup Prefab");
+    }
 
     public void OnClickMenuButton()
     {
-        SceneManager.LoadScene("Menu");
-        // 위에서 서랍 내려오는 애니메이션
+        drawer.DOAnchorPos(Vector2.zero, 0.35f).SetEase(Ease.OutCubic);
+    }
+
+    public void OnClickCloseMenuButton()
+    {
+        drawer.DOAnchorPos(new Vector2(0, 1100), 0.35f).SetEase(Ease.InCubic);
     }
 }

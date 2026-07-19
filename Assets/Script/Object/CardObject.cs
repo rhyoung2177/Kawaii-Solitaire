@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -43,6 +44,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         foreach (CardObject card in cardList)
         {
             card.transform.SetParent(InGameManager.Instance.dragLayer);
+            PlayPopAnimation();
         }
     }
 
@@ -90,6 +92,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(beforeSpace.GetComponent<RectTransform>());
         }
+        PlayPopAnimation();
     }
 
     /// <summary>
@@ -240,5 +243,18 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         }
 
         return false;
+    }
+
+    private void PlayPopAnimation()
+    {
+        transform.DOKill();
+        transform.localScale = Vector3.one;
+        transform.DOScale(1.12f, 0.08f)
+                 .SetEase(Ease.OutQuad)
+                 .OnComplete(() =>
+                 {
+                     transform.DOScale(1f, 0.12f)
+                              .SetEase(Ease.OutBack);
+                 });
     }
 }
