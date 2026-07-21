@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 04344c7a4286d394b881251dda863126
+guid: 0486ee2acfec96f459d2906e87cd7047
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2410635517405602792
-    second: Character1_0
+      213: -8836490107551822568
+    second: cloth7_0
+  - first:
+      213: 2421843266409425302
+    second: cloth7_1
+  - first:
+      213: 1124456173467199979
+    second: cloth7_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +106,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Character1
+      name: cloth7_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8e3a6e12b3c447120800000000000000
-      internalID: 2410635517405602792
+      spriteID: 81dce1e901b7e5580800000000000000
+      internalID: -8836490107551822568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cloth7_1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 0
+        width: 733
+        height: 800
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 699610c8e9d1c9120800000000000000
+      internalID: 2421843266409425302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cloth7_2
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 119
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be9e101aeeeda9f00800000000000000
+      internalID: 1124456173467199979
       vertices: []
       indices: 
       edges: []
@@ -125,7 +175,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 293025515376dac41b1a205c2bc199d3
+    spriteID: 77c3851504b299646b19ef9afe4637bb
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Character1: 2410635517405602792
+      cloth7_0: -8836490107551822568
+      cloth7_1: 2421843266409425302
+      cloth7_2: 1124456173467199979
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    public Image characterImage;
+
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI moveText;
     public TextMeshProUGUI setText;
@@ -23,6 +25,23 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
+
+        StartBreathing();
+    }
+
+
+    public void StartBreathing()
+    {
+        var defaultPos = characterImage.GetComponent<RectTransform>().anchoredPosition;
+
+        characterImage.transform.DOScale(new Vector3(0.99f, 1.01f, 1f), 1.2f)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo);
+
+        characterImage.GetComponent<RectTransform>()
+            .DOAnchorPosY(defaultPos.y + 5f, 1.2f)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo);
     }
 
     public void SetScoreText()
@@ -68,5 +87,10 @@ public class UIManager : MonoBehaviour
     public void OnClickCloseMenuButton()
     {
         drawer.DOAnchorPos(new Vector2(0, 1100), 0.35f).SetEase(Ease.InCubic);
+    }
+
+    public void ChangeCloth(int num)
+    {
+        characterImage.sprite = Resources.Load<Sprite>($"UI/Character/character{num}");
     }
 }

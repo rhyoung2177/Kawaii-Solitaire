@@ -44,7 +44,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         foreach (CardObject card in cardList)
         {
             card.transform.SetParent(InGameManager.Instance.dragLayer);
-            PlayPopAnimation();
+            PlayPopAnimation(card.transform);
         }
     }
 
@@ -79,6 +79,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
                 afterSpace.AddCardObject(card);
                 card.transform.SetParent(afterSpace.transform);
                 card.transform.SetSiblingIndex(afterSpace.transform.childCount - 1);
+                PlayPopAnimation(card.transform);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(afterSpace.GetComponent<RectTransform>());
             InGameManager.Instance.EndTurn();
@@ -89,10 +90,10 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             foreach (CardObject card in cardList)
             {
                 card.transform.SetParent(beforeSpace.transform);
+                PlayPopAnimation(card.transform);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(beforeSpace.GetComponent<RectTransform>());
         }
-        PlayPopAnimation();
     }
 
     /// <summary>
@@ -165,7 +166,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     }
 
     /// <summary>
-    /// IsCanBeginDrag과 기능은 동일하나, 힌트 기능 추가를 위해 함수 분리
+    /// 움직일 수 있는 카드들 중 첫 번째 카드일 경우만 true
     /// </summary>
     public bool IsCanBeginHint(Space space)
     {
@@ -245,7 +246,7 @@ public class CardObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         return false;
     }
 
-    private void PlayPopAnimation()
+    private void PlayPopAnimation(Transform transform)
     {
         transform.DOKill();
         transform.localScale = Vector3.one;
